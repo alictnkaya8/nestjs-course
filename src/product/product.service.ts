@@ -9,7 +9,7 @@ import { ProductModel } from 'tools/models/product.model';
 @Injectable()
 export class ProductService extends ResourceService<ProductModel, ProductDto, ProductDto> {
 
-    constructor(@InjectModel('Inventory') productMongo: Model<ProductModel>){
+    constructor(@InjectModel('Product') productMongo: Model<ProductModel>){
         super(productMongo);
     }
 
