@@ -18,7 +18,8 @@ import { TicketTypeModule } from './ticket/ticket-type/ticket-type.module';
 import { TotalModule } from './total/total.module';
 import { LoginModule } from './login/login.module';
 import { TokenMiddleware } from 'libs/middlewares/token.middleware';
-import path from 'path';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from 'libs/guards/auth.guard';
 
 @Module({
   imports: [
@@ -38,10 +39,15 @@ import path from 'path';
     LoginModule,
     MongooseModule.forRoot(environment.mongoUrl)],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    }
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-      consumer.apply(TokenMiddleware).exclude({path: 'api/login', method: RequestMethod.POST}).forRoutes({path:'*', method: RequestMethod.ALL});
+    consumer.apply(TokenMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
