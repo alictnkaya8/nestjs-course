@@ -15,9 +15,10 @@ import { ProductTypeModule } from './product/product-type/product-type.module';
 import { ActivityTypeModule } from './activity/activity-type/activity-type.module';
 import { InventoryTypeModule } from './inventory/inventory-type/inventory-type.module';
 import { TicketTypeModule } from './ticket/ticket-type/ticket-type.module';
+import { TotalModule } from './total/total.module';
 
 @Module({
-  imports: [ UserModule, RoleModule, ProductModule, ActivityModule, GroupModule, InventoryModule, TicketModule, ProductTypeModule, ActivityTypeModule, InventoryTypeModule, TicketTypeModule, LibsModule, MongooseModule.forRoot(environment.mongoUrl)],
+  imports: [ UserModule, RoleModule, ProductModule, ActivityModule, GroupModule, InventoryModule, TicketModule, ProductTypeModule, ActivityTypeModule, InventoryTypeModule, TicketTypeModule, LibsModule, TotalModule, MongooseModule.forRoot(environment.mongoUrl)],
   controllers: [AppController],
   providers: [AppService],
 })
