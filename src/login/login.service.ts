@@ -4,6 +4,8 @@ import { Model } from "mongoose";
 import { UserService } from "src/user/user.service";
 import { UserLoginDto } from "tools/dtos/user.dto";
 import { UserModel } from "tools/models/user.model";
+import * as jwt from 'jsonwebtoken';
+import environment from "tools/environment/environment";
 
 @Injectable()
 export class LoginService {
@@ -26,7 +28,8 @@ export class LoginService {
                     }
                 });
                 if (checkPwd) {
-                    return await { success: true, value: userExists };
+                    const authJwt = jwt.sign({user: userExists}, environment.jwtSecret);
+                    return await { success: true, token: authJwt };
                 } else {
                     return await { success: false, res: 'User password is incorrect!' };
                 }
