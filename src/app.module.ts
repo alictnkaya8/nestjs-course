@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import environment from 'tools/environment/environment';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,10 +17,31 @@ import { InventoryTypeModule } from './inventory/inventory-type/inventory-type.m
 import { TicketTypeModule } from './ticket/ticket-type/ticket-type.module';
 import { TotalModule } from './total/total.module';
 import { LoginModule } from './login/login.module';
+import { TokenMiddleware } from 'libs/middlewares/token.middleware';
+import path from 'path';
 
 @Module({
-  imports: [ UserModule, RoleModule, ProductModule, ActivityModule, GroupModule, InventoryModule, TicketModule, ProductTypeModule, ActivityTypeModule, InventoryTypeModule, TicketTypeModule, LibsModule, TotalModule, LoginModule, MongooseModule.forRoot(environment.mongoUrl)],
+  imports: [
+    UserModule,
+    RoleModule,
+    ProductModule,
+    ActivityModule,
+    GroupModule,
+    InventoryModule,
+    TicketModule,
+    ProductTypeModule,
+    ActivityTypeModule,
+    InventoryTypeModule,
+    TicketTypeModule,
+    LibsModule,
+    TotalModule,
+    LoginModule,
+    MongooseModule.forRoot(environment.mongoUrl)],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+      consumer.apply(TokenMiddleware).exclude({path: 'api/login', method: RequestMethod.POST}).forRoutes({path:'*', method: RequestMethod.ALL});
+  }
+}
